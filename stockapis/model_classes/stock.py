@@ -108,4 +108,4 @@ class Stock:
         self._totalTradedVolume = total_volume
 
     def set_series(self, series):
-        self.series = series
+        self._series = series

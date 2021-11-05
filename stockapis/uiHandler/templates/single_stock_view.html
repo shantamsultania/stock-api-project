@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Single Stock Data Getter</title>
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th>average Price</th>
+        <th>base Price</th>
+        <th>buy Price</th>
+        <th>close Price</th>
+        <th>cm_adj_high_dt</th>
+        <th>company Name</th>
+        <th>day High</th>
+        <th>day Low</th>
+        <th>high</th>
+        <th>isin Code</th>
+        <th>low52</th>
+        <th>open price</th>
+        <th>previous Close</th>
+        <th>total Traded Volume</th>
+        <th>series</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for stock in stock_data %}
+    <tr>
+        <td>{{ stock._averagePrice }}</td>
+        <td>{{ stock._basePrice }}</td>
+        <td>{{ stock._buyPrice }}</td>
+        <td>{{ stock._closePrice }}</td>
+        <td>{{ stock._cm_adj_high_dt }}</td>
+        <td>{{ stock._companyName }}</td>
+        <td>{{ stock._dayHigh }}</td>
+        <td>{{ stock._dayLow }}</td>
+        <td>{{ stock._high52 }}</td>
+        <td>{{ stock._isinCode }}</td>
+        <td>{{ stock._low52 }}</td>
+        <td>{{ stock._open_price }}</td>
+        <td>{{ stock._previousClose }}</td>
+        <td>{{ stock._totalTradedVolume }}</td>
+        <td>{{ stock._series }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

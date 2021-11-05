@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_ngrok import run_with_ngrok
-from stockapis.helper_classes.stock_encoder import StockEncoder
-from stockapis.controller.stock_data_handler import StockDataHandler
-from stockapis.helper_classes.helper import info, error
 
-web_app = Flask(__name__)
+from stockapis.agent_handler.stock_data_handler import StockDataHandler
+from stockapis.helper_classes.helper import info, error
+from stockapis.helper_classes.stock_encoder import StockEncoder
+
+web_app = Flask(__name__, template_folder=r"D:\stock-api-project\stockapis\uiHandler\\templates")
 
 run_with_ngrok(web_app)
 
@@ -22,7 +23,7 @@ def connect():
 
 # get Multiple Data in set of 10
 
-@web_app.route("/multiple/<index>", methods=['GET', 'POST'])
+@web_app.route("/multiple/<index>", methods=['GET'])
 def multiple(index):
     info("Debug : multiple stocks  data called with index{0}".format(str(index)))
 
@@ -33,14 +34,11 @@ def multiple(index):
         if len(output_stocks) > 0:
             info("Debug : stock data received  ")
 
-            json_stocks_data = stock_encoder_object.encode(output_stocks)
-            info("Debug : returned stocks data =  {0}".format(str(json_stocks_data)))
-
-            return json_stocks_data
+            info("Debug : returned stocks data =  {0}".format(str(stock_encoder_object.encode(output_stocks))))
+            return render_template("multiple_stock_viewer.html", stock_data=output_stocks)
 
         else:
             error("Error : no stock data received :")
-            return None
 
     except Exception as e:
         error("Error : error encounter {0}".format(str(e)))
@@ -57,18 +55,19 @@ def post_calling(code):
 
             info("Validating the stock code/company name ")
 
+            stock_data = []
+
             if stock_data_handler_object.validate_stock_code(code):
                 info("Debug : Valid stock code entered ")
-                stock_data = stock_data_handler_object.get_stock_data(code)
+                stock_data.append(stock_data_handler_object.get_stock_data(code))
 
-                json_stock_data = stock_encoder_object.encode(stock_data)
+                info("Debug : Stock Data = {0}".format(stock_encoder_object.encode(stock_data)))
 
-                info("Debug : Stock Data = {0}".format(json_stock_data))
-
-                return json_stock_data
+                return render_template("single_stock_view.html", stock_data=stock_data)
             else:
                 info("Debug : invalid company code {0}".format(str(code)))
                 return jsonify(error_messgae="invalid Company Name please check once again ")
+
     except Exception as e:
         error("Error : error encounter {0}".format(str(e)))
         return e

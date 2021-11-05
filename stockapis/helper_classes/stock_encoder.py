@@ -5,4 +5,3 @@ from json import JSONEncoder
 class StockEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
-
